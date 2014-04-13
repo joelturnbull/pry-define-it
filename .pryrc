@@ -23,8 +23,9 @@ Pry::Commands.create_command "define-it", "Commands for generating missing code 
 
       method_def = "  def #{method}(#{args.join(',')})\n    \n  end"
 
+      binding.pry
       file = Pry::CodeObject.lookup(klass,_pry_).source_file
-      file = `ack BowlingGame ./`.split(':')[0] unless file
+      file = `ack #{klass} *.rb`.split(':')[0] unless file
 
       lines = File.readlines(file).size
       code  = File.read(file).gsub(/^end/mi) { |match| "#{method_def}\n\n#{match}" }
