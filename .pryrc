@@ -1,6 +1,6 @@
 require 'active_support/inflector'
 
-Pry::Commands.create_command "define-it", "Commands for generating missing code reported during a Pry session for use in TDD" do
+Pry::Commands.create_command "define-it", "Commands for code generation reported during a Pry session for use in TDD" do
 
   def process
     last_exception = context[:pry_instance].last_exception
@@ -21,9 +21,8 @@ Pry::Commands.create_command "define-it", "Commands for generating missing code 
       method = last_exception.name.to_s
       args   = last_exception.args.each_with_index.map { |arg,i| "#{arg.class.to_s.downcase}#{i}" }
 
-      method_def = "  def #{method}(#{args.join(',')})\n    \n  end"
+      method_def = "  def #{method}(#{args.join(',')})\n     \n  end"
 
-      binding.pry
       file = Pry::CodeObject.lookup(klass,_pry_).source_file
       file = `ack #{klass} *.rb`.split(':')[0] unless file
 
